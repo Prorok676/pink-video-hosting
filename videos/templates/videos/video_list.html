@@ -1,0 +1,324 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🌸 Розовый Видеохостинг</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', sans-serif;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            background: #fff0f5; /* нежно-розовый фон */
+        }
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+            border-bottom: 2px solid #ffb6c1;
+            padding-bottom: 15px;
+        }
+        h1 {
+            color: #d63384; /* тёмно-розовый */
+        }
+        .video-grid {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 25px;
+        }
+        .video-card {
+            border: 1px solid #ffb6c1;
+            padding: 15px;
+            width: 380px;
+            border-radius: 16px;
+            box-shadow: 0 4px 10px rgba(214, 51, 132, 0.1);
+            background: white;
+        }
+        .video-card h3 {
+            color: #c71585;
+            margin-top: 0;
+        }
+        .video-card video {
+            width: 100%;
+            border-radius: 12px;
+            margin-bottom: 10px;
+            border: 2px solid #ffd1dc;
+        }
+        .like-buttons {
+            margin: 10px 0;
+        }
+        .btn-like, .btn-dislike {
+            padding: 6px 18px;
+            margin-right: 10px;
+            cursor: pointer;
+            border: 1px solid #ffb6c1;
+            background: white;
+            border-radius: 30px;
+            transition: all 0.2s;
+            font-weight: bold;
+            color: #d63384;
+        }
+        .btn-like:hover {
+            background: #ffe4e9;
+            border-color: #ff69b4;
+        }
+        .btn-dislike:hover {
+            background: #ffe4e9;
+            border-color: #ff69b4;
+        }
+        .error-message {
+            color: #dc3545;
+            font-size: 13px;
+            margin-left: 10px;
+        }
+        .comments-section {
+            margin-top: 15px;
+            border-top: 1px solid #ffd1dc;
+            padding-top: 10px;
+        }
+        .comments-section h4 {
+            color: #c71585;
+            margin-bottom: 10px;
+        }
+        .comment-item {
+            background: #fff0f5;
+            padding: 8px 12px;
+            border-radius: 16px;
+            margin-bottom: 8px;
+            font-size: 14px;
+            border-left: 3px solid #ff69b4;
+        }
+        .comment-item strong {
+            color: #d63384;
+        }
+        .comment-form {
+            display: flex;
+            gap: 5px;
+            margin-top: 10px;
+        }
+        .comment-form input {
+            flex: 1;
+            padding: 10px 14px;
+            border-radius: 30px;
+            border: 1px solid #ffb6c1;
+            outline: none;
+            background: white;
+        }
+        .comment-form input:focus {
+            border-color: #ff69b4;
+            box-shadow: 0 0 0 3px rgba(255, 105, 180, 0.15);
+        }
+        .comment-form button {
+            padding: 10px 20px;
+            border-radius: 30px;
+            background: #ff69b4;
+            color: white;
+            border: none;
+            cursor: pointer;
+            font-weight: bold;
+            transition: all 0.2s;
+        }
+        .comment-form button:hover {
+            background: #d63384;
+            transform: scale(1.02);
+        }
+        button {
+            cursor: pointer;
+            padding: 8px 16px;
+            border-radius: 30px;
+            border: 1px solid #ffb6c1;
+            background: white;
+            color: #d63384;
+            font-weight: 500;
+            transition: all 0.2s;
+        }
+        button:hover {
+            background: #ff69b4;
+            color: white;
+            border-color: #ff69b4;
+        }
+        a {
+            color: #d63384;
+            text-decoration: none;
+        }
+        a:hover {
+            text-decoration: underline;
+        }
+        .empty-state {
+            text-align: center;
+            padding: 50px;
+            color: #c71585;
+            font-size: 18px;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="header">
+        <h1>🎀 Розовый Видеохостинг</h1>
+        <div>
+            {% if user.is_authenticated %}
+                <span style="margin-right: 15px; color: #d63384;">🌸 Привет, <strong>{{ user.username }}</strong>!</span>
+                            {% if user.is_staff %}
+                    <a href="{% url 'admin_video_list' %}"><button style="background: #d63384; color: white;">👑 Админка</button></a>
+                {% endif %}
+                <a href="{% url 'upload' %}"><button>📤 Загрузить видео</button></a>
+                <form action="{% url 'logout' %}" method="post" style="display: inline;">
+                    {% csrf_token %}
+                    <button type="submit">🚪 Выйти</button>
+                </form>
+            {% else %}
+                <a href="{% url 'login' %}"><button>🔐 Войти</button></a>
+                <a href="{% url 'register' %}"><button>📝 Регистрация</button></a>
+            {% endif %}
+        </div>
+    </div>
+
+    <div class="video-grid">
+        {% for video in videos %}
+            <div class="video-card" id="video-{{ video.id }}">
+                <h3>{{ video.title }}</h3>
+                <p style="color: #666;">{{ video.description|truncatechars:100 }}</p>
+                <p style="font-size: 13px; color: #d63384;">
+                    👤 {{ video.author.username }} | 📅 {{ video.created_at|date:"d.m.Y" }}
+                </p>
+                <video controls>
+                    <source src="{{ video.video_file.url }}" type="video/mp4">
+                    Ваш браузер не поддерживает видео.
+                </video>
+
+                <!-- Блок лайков -->
+                <div class="like-buttons">
+                    <button class="btn-like" onclick="sendLike({{ video.id }}, true)">👍 <span id="likes-count-{{ video.id }}">{{ video.likes }}</span></button>
+                    <button class="btn-dislike" onclick="sendLike({{ video.id }}, false)">👎 <span id="dislikes-count-{{ video.id }}">{{ video.dislikes }}</span></button>
+                    <span id="message-{{ video.id }}" class="error-message"></span>
+                </div>
+
+                <!-- Блок комментариев -->
+                <div class="comments-section">
+                    <h4>💬 Комментарии</h4>
+                    <div class="comments-list" id="comments-{{ video.id }}" style="max-height: 200px; overflow-y: auto; margin-bottom: 10px;">
+                        {% for comment in video.comments.all %}
+                            <div class="comment-item">
+                                <strong>{{ comment.author.username }}</strong>
+                                <span style="color: #ff69b4; font-size: 11px;">{{ comment.created_at|date:"d.m H:i" }}</span>
+                                <p style="margin: 5px 0 0 0; color: #333;">{{ comment.text }}</p>
+                            </div>
+                        {% empty %}
+                            <p style="color: #c71585; font-style: italic;">🌸 Будьте первым, кто оставит комментарий!</p>
+                        {% endfor %}
+                    </div>
+
+                    {% if user.is_authenticated %}
+                        <form class="comment-form" onsubmit="sendComment(event, {{ video.id }})">
+                            {% csrf_token %}
+                            <input type="text" name="text" maxlength="500" placeholder="Написать комментарий..." required>
+                            <button type="submit">💕</button>
+                        </form>
+                    {% else %}
+                        <p style="font-size: 13px;"><a href="{% url 'login' %}">Войдите</a> <span style="color: #d63384;">чтобы комментировать</span></p>
+                    {% endif %}
+                </div>
+            </div>
+        {% empty %}
+            <div class="empty-state">
+                <p>🌸 Пока нет видео. <a href="{% url 'upload' %}">Загрузите первое!</a> 🌸</p>
+            </div>
+        {% endfor %}
+    </div>
+
+    <script>
+        function getCookie(name) {
+            let cookieValue = null;
+            if (document.cookie && document.cookie !== '') {
+                const cookies = document.cookie.split(';');
+                for (let i = 0; i < cookies.length; i++) {
+                    const cookie = cookies[i].trim();
+                    if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                        cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                        break;
+                    }
+                }
+            }
+            return cookieValue;
+        }
+
+        async function sendLike(videoId, isLike) {
+            const csrftoken = getCookie('csrftoken');
+            const messageSpan = document.getElementById(`message-${videoId}`);
+
+            try {
+                const response = await fetch(`/like/${videoId}/`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRFToken': csrftoken,
+                    },
+                    body: JSON.stringify({ 'is_like': isLike })
+                });
+
+                const data = await response.json();
+
+                if (data.success) {
+                    document.getElementById(`likes-count-${videoId}`).innerText = data.likes;
+                    document.getElementById(`dislikes-count-${videoId}`).innerText = data.dislikes;
+                    messageSpan.innerText = '💖';
+                    setTimeout(() => messageSpan.innerText = '', 1500);
+                } else {
+                    messageSpan.innerText = 'Вы уже оценили это видео 🌸';
+                    setTimeout(() => messageSpan.innerText = '', 2000);
+                }
+            } catch (error) {
+                messageSpan.innerText = 'Ошибка';
+                setTimeout(() => messageSpan.innerText = '', 2000);
+            }
+        }
+
+        async function sendComment(event, videoId) {
+            event.preventDefault();
+            const form = event.target;
+            const input = form.querySelector('input[name="text"]');
+            const text = input.value.trim();
+            const csrftoken = getCookie('csrftoken');
+
+            if (!text) return;
+
+            try {
+                const response = await fetch(`/comment/${videoId}/`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/x-www-form-urlencoded',
+                        'X-CSRFToken': csrftoken,
+                    },
+                    body: `text=${encodeURIComponent(text)}`
+                });
+
+                const data = await response.json();
+
+                if (data.success) {
+                    const commentsList = document.getElementById(`comments-${videoId}`);
+                    if (commentsList.querySelector('p') && commentsList.querySelector('p').innerText.includes('Будьте первым')) {
+                        commentsList.innerHTML = '';
+                    }
+
+                    const newComment = document.createElement('div');
+                    newComment.className = 'comment-item';
+                    newComment.innerHTML = `
+                        <strong>${data.author}</strong>
+                        <span style="color: #ff69b4; font-size: 11px;">${data.created_at}</span>
+                        <p style="margin: 5px 0 0 0; color: #333;">${data.text}</p>
+                    `;
+
+                    commentsList.insertBefore(newComment, commentsList.firstChild);
+                    input.value = '';
+                }
+            } catch (error) {
+                console.error('Ошибка:', error);
+            }
+        }
+    </script>
+</body>
+</html>

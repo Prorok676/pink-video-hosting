@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>Админ-панель</title>
+    <style>
+        body { font-family: sans-serif; margin: 20px; background: #fce4ec; }
+        table { width: 100%; border-collapse: collapse; background: white; border-radius: 12px; overflow: hidden; box-shadow: 0 2px 10px rgba(214, 51, 132, 0.1); }
+        th, td { padding: 12px; text-align: left; border-bottom: 1px solid #ffb6c1; }
+        th { background: #ff69b4; color: white; }
+        .blocked { background: #ffe4e9; color: #d63384; }
+        .btn { padding: 6px 12px; border-radius: 20px; text-decoration: none; color: white; font-weight: bold; }
+        .btn-block { background: #d63384; }
+        .btn-unblock { background: #28a745; }
+        .btn:hover { opacity: 0.8; }
+        .back-link { display: inline-block; margin-bottom: 20px; color: #d63384; }
+    </style>
+</head>
+<body>
+    <a href="{% url 'home' %}" class="back-link">← На главную</a>
+    <h1 style="color: #c71585;">👑 Админ-панель: Управление видео</h1>
+
+    <table>
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Название</th>
+                <th>Автор</th>
+                <th>Дата</th>
+                <th>Статус</th>
+                <th>Действие</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for video in videos %}
+                <tr class="{% if video.is_blocked %}blocked{% endif %}">
+                    <td>{{ video.id }}</td>
+                    <td>{{ video.title }}</td>
+                    <td>{{ video.author.username }}</td>
+                    <td>{{ video.created_at|date:"d.m.Y H:i" }}</td>
+                    <td>
+                        {% if video.is_blocked %}
+                            🚫 Заблокировано
+                        {% else %}
+                            ✅ Активно
+                        {% endif %}
+                    </td>
+                    <td>
+                        <a href="{% url 'toggle_block' video.id %}" class="btn {% if video.is_blocked %}btn-unblock{% else %}btn-block{% endif %}">
+                            {% if video.is_blocked %}Разблокировать{% else %}Заблокировать{% endif %}
+                        </a>
+                    </td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</body>
+</html>

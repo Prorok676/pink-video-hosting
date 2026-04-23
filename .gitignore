@@ -1,0 +1,24 @@
+# Виртуальное окружение
+venv/
+.venv/
+
+# Файлы базы данных
+db.sqlite3
+
+# Медиафайлы (видео)
+media/
+
+# Кеш Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# Настройки IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# Папка с миграциями (кроме __init__.py)
+*/migrations/__pycache__/
