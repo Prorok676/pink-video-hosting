@@ -5,9 +5,6 @@ venv/
 # Файлы базы данных
 db.sqlite3
 
-# Медиафайлы (видео)
-media/
-
 # Кеш Python
 __pycache__/
 *.pyc

@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>🌸 Розовый Видеохостинг</title>
+    <title>Розовый Видеохостинг</title>
     <style>
         body {
             font-family: 'Segoe UI', sans-serif;
@@ -158,21 +158,21 @@
 <body>
 
     <div class="header">
-        <h1>🎀 Розовый Видеохостинг</h1>
+        <h1>Тикиток</h1>
         <div>
             {% if user.is_authenticated %}
-                <span style="margin-right: 15px; color: #d63384;">🌸 Привет, <strong>{{ user.username }}</strong>!</span>
+                <span style="margin-right: 15px; color: #d63384;">Привет, <strong>{{ user.username }}</strong>!</span>
                             {% if user.is_staff %}
-                    <a href="{% url 'admin_video_list' %}"><button style="background: #d63384; color: white;">👑 Админка</button></a>
+                    <a href="{% url 'admin_video_list' %}"><button style="background: #d63384; color: white;">АдминОЧка</button></a>
                 {% endif %}
-                <a href="{% url 'upload' %}"><button>📤 Загрузить видео</button></a>
+                <a href="{% url 'upload' %}"><button>Загрузить видео</button></a>
                 <form action="{% url 'logout' %}" method="post" style="display: inline;">
                     {% csrf_token %}
-                    <button type="submit">🚪 Выйти</button>
+                    <button type="submit">Выйти</button>
                 </form>
             {% else %}
-                <a href="{% url 'login' %}"><button>🔐 Войти</button></a>
-                <a href="{% url 'register' %}"><button>📝 Регистрация</button></a>
+                <a href="{% url 'login' %}"><button>Войти</button></a>
+                <a href="{% url 'register' %}"><button>Регистрация</button></a>
             {% endif %}
         </div>
     </div>
@@ -183,7 +183,7 @@
                 <h3>{{ video.title }}</h3>
                 <p style="color: #666;">{{ video.description|truncatechars:100 }}</p>
                 <p style="font-size: 13px; color: #d63384;">
-                    👤 {{ video.author.username }} | 📅 {{ video.created_at|date:"d.m.Y" }}
+                    {{ video.author.username }} | {{ video.created_at|date:"d.m.Y" }}
                 </p>
                 <video controls>
                     <source src="{{ video.video_file.url }}" type="video/mp4">
@@ -199,7 +199,7 @@
 
                 <!-- Блок комментариев -->
                 <div class="comments-section">
-                    <h4>💬 Комментарии</h4>
+                    <h4>Комментарии</h4>
                     <div class="comments-list" id="comments-{{ video.id }}" style="max-height: 200px; overflow-y: auto; margin-bottom: 10px;">
                         {% for comment in video.comments.all %}
                             <div class="comment-item">
@@ -208,7 +208,7 @@
                                 <p style="margin: 5px 0 0 0; color: #333;">{{ comment.text }}</p>
                             </div>
                         {% empty %}
-                            <p style="color: #c71585; font-style: italic;">🌸 Будьте первым, кто оставит комментарий!</p>
+                            <p style="color: #c71585; font-style: italic;">Будьте первым, кто оставит комментарий!</p>
                         {% endfor %}
                     </div>
 
@@ -225,7 +225,7 @@
             </div>
         {% empty %}
             <div class="empty-state">
-                <p>🌸 Пока нет видео. <a href="{% url 'upload' %}">Загрузите первое!</a> 🌸</p>
+                <p>Пока нет видео. <a href="{% url 'upload' %}">Загрузите первое!</a></p>
             </div>
         {% endfor %}
     </div>
@@ -268,7 +268,7 @@
                     messageSpan.innerText = '💖';
                     setTimeout(() => messageSpan.innerText = '', 1500);
                 } else {
-                    messageSpan.innerText = 'Вы уже оценили это видео 🌸';
+                    messageSpan.innerText = 'Вы уже оценили это видео';
                     setTimeout(() => messageSpan.innerText = '', 2000);
                 }
             } catch (error) {

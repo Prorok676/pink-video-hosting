@@ -18,7 +18,7 @@
 </head>
 <body>
     <a href="{% url 'home' %}" class="back-link">← На главную</a>
-    <h1 style="color: #c71585;">👑 Админ-панель: Управление видео</h1>
+    <h1 style="color: #c71585;">Админ-панель: Управление видео</h1>
 
     <table>
         <thead>
@@ -40,9 +40,9 @@
                     <td>{{ video.created_at|date:"d.m.Y H:i" }}</td>
                     <td>
                         {% if video.is_blocked %}
-                            🚫 Заблокировано
+                            Заблокировано
                         {% else %}
-                            ✅ Активно
+                            Активно
                         {% endif %}
                     </td>
                     <td>
