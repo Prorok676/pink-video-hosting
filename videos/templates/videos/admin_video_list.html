@@ -2,23 +2,125 @@
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
-    <title>Админ-панель</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Админ-панель - Тикиток</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
     <style>
-        body { font-family: sans-serif; margin: 20px; background: #fce4ec; }
-        table { width: 100%; border-collapse: collapse; background: white; border-radius: 12px; overflow: hidden; box-shadow: 0 2px 10px rgba(214, 51, 132, 0.1); }
-        th, td { padding: 12px; text-align: left; border-bottom: 1px solid #ffb6c1; }
-        th { background: #ff69b4; color: white; }
-        .blocked { background: #ffe4e9; color: #d63384; }
-        .btn { padding: 6px 12px; border-radius: 20px; text-decoration: none; color: white; font-weight: bold; }
-        .btn-block { background: #d63384; }
-        .btn-unblock { background: #28a745; }
-        .btn:hover { opacity: 0.8; }
-        .back-link { display: inline-block; margin-bottom: 20px; color: #d63384; }
+        :root {
+            --bg: #08080b;
+            --surface: #131318;
+            --border: #23232a;
+            --text: #fafafa;
+            --text-secondary: #a1a1aa;
+            --accent: #ec4899;
+            --accent-dark: #be185d;
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            padding: 30px;
+            min-height: 100vh;
+        }
+
+        .back-link {
+            display: inline-block;
+            margin-bottom: 24px;
+            color: #f472b6;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 0.9rem;
+            transition: 0.2s;
+        }
+
+        .back-link:hover {
+            color: #fbcfe8;
+        }
+
+        h1 {
+            font-weight: 900;
+            font-size: 1.8rem;
+            margin-bottom: 24px;
+            background: linear-gradient(135deg, #f472b6 0%, #ec4899 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            letter-spacing: -0.5px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            background: var(--surface);
+            border-radius: 16px;
+            overflow: hidden;
+            border: 1px solid var(--border);
+        }
+
+        th, td {
+            padding: 14px 18px;
+            text-align: left;
+        }
+
+        th {
+            background: #1c0a14;
+            color: #f472b6;
+            font-weight: 700;
+            font-size: 0.82rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        td {
+            border-bottom: 1px solid var(--border);
+            font-size: 0.88rem;
+            color: #d4d4d8;
+        }
+
+        tr:hover td {
+            background: rgba(255,255,255,0.015);
+        }
+
+        .blocked td {
+            background: rgba(239, 68, 68, 0.04);
+        }
+
+        .btn {
+            padding: 8px 18px;
+            border-radius: 100px;
+            text-decoration: none;
+            color: white;
+            font-weight: 700;
+            font-size: 0.8rem;
+            transition: 0.2s;
+            display: inline-block;
+        }
+
+        .btn-block {
+            background: linear-gradient(135deg, #ec4899, #be185d);
+        }
+
+        .btn-block:hover {
+            box-shadow: 0 0 20px rgba(236, 72, 153, 0.4);
+            transform: translateY(-1px);
+        }
+
+        .btn-unblock {
+            background: linear-gradient(135deg, #22c55e, #16a34a);
+        }
+
+        .btn-unblock:hover {
+            box-shadow: 0 0 20px rgba(34, 197, 94, 0.3);
+            transform: translateY(-1px);
+        }
     </style>
 </head>
 <body>
-    <a href="{% url 'home' %}" class="back-link">← На главную</a>
-    <h1 style="color: #c71585;">Админ-панель: Управление видео</h1>
+    <a href="{% url 'home' %}" class="back-link">На главную</a>
+    <h1>Админ-панель: Управление видео</h1>
 
     <table>
         <thead>

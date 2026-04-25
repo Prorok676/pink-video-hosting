@@ -6,22 +6,21 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Тикиток</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
     <style>
         :root {
-            --bg: #fafafa;
-            --surface: #ffffff;
-            --text: #1a1a1a;
-            --text-secondary: #6b7280;
+            --bg: #08080b;
+            --surface: #131318;
+            --surface-hover: #1c1c22;
+            --text: #fafafa;
+            --text-secondary: #a1a1aa;
             --accent: #ec4899;
-            --accent-hover: #db2777;
-            --accent-light: #fdf2f8;
-            --border: #f3f4f6;
-            --shadow: 0 1px 3px rgba(0,0,0,0.04), 0 1px 2px rgba(0,0,0,0.06);
-            --shadow-hover: 0 10px 25px rgba(0,0,0,0.06), 0 4px 10px rgba(0,0,0,0.04);
-            --radius: 16px;
-            --radius-sm: 10px;
-            --transition: 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+            --accent-glow: rgba(236, 72, 153, 0.5);
+            --accent-dark: #be185d;
+            --border: #23232a;
+            --radius: 22px;
+            --radius-sm: 14px;
+            --transition: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
         * { box-sizing: border-box; }
@@ -32,227 +31,348 @@
             color: var(--text);
             line-height: 1.6;
             -webkit-font-smoothing: antialiased;
+            min-height: 100vh;
+            overflow-x: hidden;
         }
 
+        /* Частицы */
+        .particles {
+            position: fixed;
+            inset: 0;
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        .particle {
+            position: absolute;
+            border-radius: 50%;
+            background: var(--accent);
+            animation: floatUp linear infinite;
+            opacity: 0;
+        }
+
+        @keyframes floatUp {
+            0% { transform: translateY(100vh) scale(0); opacity: 0; }
+            10% { opacity: 0.6; }
+            90% { opacity: 0.2; }
+            100% { transform: translateY(-10vh) scale(1.5); opacity: 0; }
+        }
+
+        .container { position: relative; z-index: 1; }
+
+        /* Шапка */
         .navbar {
-    background: #fce7f3 !important;
-    border-bottom: 2px solid #f9a8d4;
-    padding: 14px 0;
-    position: sticky;
-    top: 0;
-    z-index: 100;
-    box-shadow: 0 4px 12px rgba(236, 72, 153, 0.08);
-}
+            background: rgba(19, 19, 24, 0.8) !important;
+            backdrop-filter: blur(30px);
+            -webkit-backdrop-filter: blur(30px);
+            border-bottom: 1px solid var(--border);
+            padding: 14px 0;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
 
-       .navbar-brand {
-    font-weight: 700;
-    font-size: 1.4rem;
-    color: #be185d !important;
-    letter-spacing: -0.3px;
-    text-transform: lowercase;
-}
+        .navbar-brand {
+            font-weight: 900;
+            font-size: 1.6rem;
+            background: linear-gradient(135deg, #f472b6 0%, #ec4899 30%, #db2777 60%, #f472b6 100%);
+            background-size: 200% 200%;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            letter-spacing: -1px;
+            text-transform: lowercase;
+            animation: gradientMove 4s ease-in-out infinite;
+        }
 
+        @keyframes gradientMove {
+            0%, 100% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+        }
+
+        /* Кнопки */
         .btn {
-            font-weight: 500;
-            font-size: 0.875rem;
-            padding: 9px 20px;
+            font-weight: 600;
+            font-size: 0.85rem;
+            padding: 10px 22px;
             border-radius: 100px;
             transition: var(--transition);
             letter-spacing: -0.2px;
+            position: relative;
+            overflow: hidden;
         }
 
         .btn-primary {
-            background: var(--accent);
+            background: linear-gradient(135deg, #ec4899 0%, #be185d 100%);
             border: none;
+            box-shadow: 0 0 30px rgba(236, 72, 153, 0.25);
+            animation: glowPulse 2s ease-in-out infinite;
         }
 
         .btn-primary:hover {
-            background: var(--accent-hover);
-            transform: translateY(-1px);
-            box-shadow: 0 4px 12px rgba(236, 72, 153, 0.25);
+            transform: translateY(-3px);
+            box-shadow: 0 0 50px rgba(236, 72, 153, 0.5);
+        }
+
+        @keyframes glowPulse {
+            0%, 100% { box-shadow: 0 0 30px rgba(236, 72, 153, 0.25); }
+            50% { box-shadow: 0 0 50px rgba(236, 72, 153, 0.45); }
         }
 
         .btn-outline-primary {
-            border: 1.5px solid var(--accent);
-            color: var(--accent);
+            border: 1.5px solid rgba(236, 72, 153, 0.4);
+            color: #f472b6;
             background: transparent;
+            backdrop-filter: blur(10px);
         }
 
         .btn-outline-primary:hover {
-            background: var(--accent-light);
-            color: var(--accent-hover);
-            border-color: var(--accent-hover);
+            background: rgba(236, 72, 153, 0.08);
+            border-color: #ec4899;
+            color: #fbcfe8;
+            box-shadow: 0 0 30px rgba(236, 72, 153, 0.2);
         }
 
         .btn-outline-secondary {
-            border: 1.5px solid #e5e7eb;
+            border: 1.5px solid #3f3f46;
             color: var(--text-secondary);
             background: transparent;
         }
 
         .btn-outline-secondary:hover {
-            background: #f9fafb;
-            border-color: #d1d5db;
-            color: var(--text);
+            background: rgba(255,255,255,0.03);
+            border-color: #52525b;
+            color: #d4d4d8;
         }
 
         .btn-admin {
-    background: #db2777;
-    border: none;
-    color: white;
-    font-weight: 600;
-}
+            background: linear-gradient(135deg, #db2777 0%, #9d174d 100%);
+            border: none;
+            color: white;
+            font-weight: 700;
+            box-shadow: 0 0 25px rgba(219, 39, 119, 0.3);
+            animation: glowPulseAdmin 2s ease-in-out infinite;
+        }
 
-.btn-admin:hover {
-    background: #be185d;
-    transform: translateY(-1px);
-    box-shadow: 0 4px 12px rgba(219, 39, 119, 0.3);
-}
+        .btn-admin:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 0 45px rgba(219, 39, 119, 0.55);
+        }
 
+        @keyframes glowPulseAdmin {
+            0%, 100% { box-shadow: 0 0 25px rgba(219, 39, 119, 0.3); }
+            50% { box-shadow: 0 0 45px rgba(219, 39, 119, 0.5); }
+        }
+
+        /* Сетка */
         .video-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(360px, 1fr));
-            gap: 22px;
-            padding: 24px 0;
+            grid-template-columns: repeat(auto-fill, minmax(400px, 1fr));
+            gap: 28px;
+            padding: 28px 0 50px;
+            perspective: 1200px;
         }
 
         .video-card {
             background: var(--surface);
             border-radius: var(--radius);
-            box-shadow: var(--shadow);
             border: 1px solid var(--border);
             overflow: hidden;
-            transition: var(--transition);
+            transition: transform 0.4s cubic-bezier(0.23, 1, 0.32, 1), box-shadow 0.4s ease;
             display: flex;
             flex-direction: column;
+            position: relative;
+            transform-style: preserve-3d;
+            will-change: transform;
+        }
+
+        .video-card::before {
+            content: '';
+            position: absolute;
+            inset: -1px;
+            border-radius: var(--radius);
+            padding: 1px;
+            background: linear-gradient(135deg, rgba(236, 72, 153, 0.3), transparent 30%, transparent 70%, rgba(236, 72, 153, 0.2));
+            -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+            mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+            -webkit-mask-composite: xor;
+            mask-composite: exclude;
+            pointer-events: none;
+            opacity: 0;
+            transition: opacity 0.5s;
         }
 
         .video-card:hover {
-            box-shadow: var(--shadow-hover);
-            transform: translateY(-2px);
+            transform: translateY(-6px) rotateX(1deg);
+            box-shadow: 0 30px 70px rgba(0,0,0,0.5), 0 0 40px rgba(236, 72, 153, 0.1);
+            border-color: #333;
         }
 
-        .video-thumb {
+        .video-card:hover::before {
+            opacity: 1;
+            animation: borderGlow 3s ease-in-out infinite;
+        }
+
+        @keyframes borderGlow {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.4; }
+        }
+
+        .video-card .video-thumb {
             aspect-ratio: 16 / 9;
-            background: #f3f4f6;
+            background: #060608;
             display: flex;
             align-items: center;
             justify-content: center;
             overflow: hidden;
+            position: relative;
+        }
+
+        .video-thumb::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(to top, rgba(0,0,0,0.4) 0%, transparent 35%);
+            pointer-events: none;
+            z-index: 1;
         }
 
         .video-thumb video {
-    width: 100%;
-    height: 100%;
-    object-fit: contain;
-    background: #000;
-}
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+            position: relative;
+            z-index: 0;
+        }
 
         .video-body {
-            padding: 18px 20px 14px;
+            padding: 20px 22px 18px;
             flex: 1;
             display: flex;
             flex-direction: column;
         }
 
         .video-title {
-            font-weight: 650;
-            font-size: 1rem;
+            font-weight: 800;
+            font-size: 1.05rem;
             color: var(--text);
             margin-bottom: 6px;
-            letter-spacing: -0.2px;
-            line-height: 1.3;
+            letter-spacing: -0.4px;
         }
 
         .video-desc {
-            font-size: 0.85rem;
+            font-size: 0.84rem;
             color: var(--text-secondary);
             margin-bottom: 10px;
-            line-height: 1.4;
+            line-height: 1.5;
         }
 
         .video-meta {
-            font-size: 0.78rem;
-            color: #9ca3af;
-            margin-bottom: 14px;
+            font-size: 0.76rem;
+            color: #71717a;
+            margin-bottom: 16px;
+            font-weight: 500;
         }
 
+        /* Лайки */
         .actions {
             display: flex;
             align-items: center;
-            gap: 12px;
+            gap: 14px;
             margin-bottom: 16px;
         }
 
         .btn-like, .btn-dislike {
             display: inline-flex;
             align-items: center;
-            gap: 5px;
-            padding: 7px 16px;
+            gap: 7px;
+            padding: 9px 20px;
             border-radius: 100px;
             font-size: 0.85rem;
-            font-weight: 500;
+            font-weight: 600;
             cursor: pointer;
             transition: var(--transition);
-            background: var(--surface);
-            border: 1.5px solid #e5e7eb;
+            background: transparent;
+            border: 1.5px solid #3f3f46;
             color: var(--text-secondary);
+            position: relative;
+            overflow: hidden;
         }
 
         .btn-like:hover {
-            border-color: #fca5a5;
-            color: #ef4444;
-            background: #fef2f2;
+            border-color: #ef4444;
+            color: #fca5a5;
+            background: rgba(239, 68, 68, 0.08);
+            box-shadow: 0 0 25px rgba(239, 68, 68, 0.2);
+            animation: heartBeat 0.5s ease-in-out;
         }
 
         .btn-dislike:hover {
-            border-color: #d1d5db;
-            color: #6b7280;
-            background: #f3f4f6;
+            border-color: #52525b;
+            color: #a1a1aa;
+            background: rgba(255,255,255,0.03);
+        }
+
+        @keyframes heartBeat {
+            0%, 100% { transform: scale(1); }
+            15% { transform: scale(1.15); }
+            30% { transform: scale(1); }
+            45% { transform: scale(1.1); }
+            60% { transform: scale(1); }
         }
 
         .message {
             font-size: 0.78rem;
-            color: #ef4444;
+            color: #f87171;
             font-weight: 500;
         }
 
+        /* Комментарии */
         .comments-section {
             border-top: 1px solid var(--border);
-            padding-top: 14px;
+            padding-top: 16px;
             margin-top: auto;
         }
 
         .comments-title {
-            font-weight: 650;
+            font-weight: 750;
             font-size: 0.85rem;
-            color: var(--text);
-            margin-bottom: 10px;
+            color: #d4d4d8;
+            margin-bottom: 12px;
+            letter-spacing: -0.2px;
         }
 
         .comments-list {
-            max-height: 180px;
+            max-height: 190px;
             overflow-y: auto;
-            margin-bottom: 10px;
+            margin-bottom: 12px;
+            scrollbar-width: thin;
+            scrollbar-color: #3f3f46 transparent;
         }
 
         .comment-bubble {
-            background: #f9fafb;
-            padding: 10px 14px;
-            border-radius: 12px;
+            background: rgba(255,255,255,0.02);
+            padding: 11px 15px;
+            border-radius: 14px;
             margin-bottom: 8px;
-            font-size: 0.82rem;
+            font-size: 0.83rem;
             border-left: 3px solid var(--accent);
+            transition: var(--transition);
+        }
+
+        .comment-bubble:hover {
+            background: rgba(255,255,255,0.04);
+            border-left-color: #f472b6;
         }
 
         .comment-bubble strong {
-            color: var(--accent);
-            font-weight: 600;
+            color: #f472b6;
+            font-weight: 700;
         }
 
         .comment-time {
-            font-size: 0.72rem;
-            color: #cbd5e1;
+            font-size: 0.7rem;
+            color: #52525b;
             margin-left: 6px;
         }
 
@@ -263,62 +383,69 @@
 
         .comment-form input {
             flex: 1;
-            padding: 10px 14px;
+            padding: 11px 16px;
             border-radius: 100px;
-            border: 1.5px solid #e5e7eb;
-            font-size: 0.85rem;
+            border: 1.5px solid #3f3f46;
+            font-size: 0.84rem;
             outline: none;
             transition: var(--transition);
-            background: #f9fafb;
+            background: rgba(255,255,255,0.03);
+            color: var(--text);
         }
 
         .comment-form input:focus {
             border-color: var(--accent);
-            box-shadow: 0 0 0 3px rgba(236, 72, 153, 0.1);
-            background: white;
+            box-shadow: 0 0 25px rgba(236, 72, 153, 0.2);
+            background: rgba(255,255,255,0.05);
         }
 
         .comment-form button {
-            padding: 10px 18px;
+            padding: 11px 22px;
             border-radius: 100px;
-            background: var(--accent);
+            background: linear-gradient(135deg, #ec4899, #db2777);
             color: white;
             border: none;
-            font-weight: 600;
-            font-size: 0.85rem;
+            font-weight: 700;
+            font-size: 0.84rem;
             cursor: pointer;
             transition: var(--transition);
+            box-shadow: 0 0 20px var(--accent-glow);
         }
 
         .comment-form button:hover {
-            background: var(--accent-hover);
+            transform: scale(1.05);
+            box-shadow: 0 0 35px rgba(236, 72, 153, 0.6);
         }
 
         .empty-state {
             text-align: center;
-            padding: 80px 20px;
+            padding: 100px 20px;
             color: var(--text-secondary);
+            grid-column: 1 / -1;
         }
 
         .empty-state p {
-            font-size: 1rem;
-            margin-bottom: 16px;
-        }
-
-        .empty-state a {
-            color: var(--accent);
-            text-decoration: none;
+            font-size: 1.2rem;
+            margin-bottom: 18px;
             font-weight: 600;
         }
 
+        .empty-state a {
+            color: #f472b6;
+            text-decoration: none;
+            font-weight: 700;
+            transition: var(--transition);
+        }
+
         .empty-state a:hover {
-            text-decoration: underline;
+            color: #fbcfe8;
+            text-shadow: 0 0 15px rgba(236, 72, 153, 0.4);
         }
 
         @media (max-width: 768px) {
             .video-grid {
                 grid-template-columns: 1fr;
-                gap: 16px;
+                gap: 20px;
             }
             .navbar .container {
                 flex-wrap: wrap;
@@ -329,9 +456,11 @@
 </head>
 <body>
 
+    <div class="particles" id="particles"></div>
+
     <nav class="navbar">
         <div class="container d-flex justify-content-between align-items-center">
-            <a class="navbar-brand" href="{% url 'home' %}">Тикиток</a>
+            <a class="navbar-brand" href="{% url 'home' %}">тикиток</a>
             <div class="d-flex gap-2 align-items-center flex-wrap">
                 {% if user.is_authenticated %}
                     <span class="text-secondary me-2 small fw-medium">Привет, {{ user.username }}</span>
@@ -354,7 +483,7 @@
     <div class="container">
         <div class="video-grid">
             {% for video in videos %}
-                <div class="video-card" id="video-{{ video.id }}">
+                <div class="video-card" id="video-{{ video.id }}" data-tilt>
                     <div class="video-thumb">
                         <video controls>
                             <source src="{{ video.video_file.url }}" type="video/mp4">
@@ -384,25 +513,25 @@
                                         <div style="margin-top: 3px;">{{ comment.text }}</div>
                                     </div>
                                 {% empty %}
-                                    <div style="font-size: 0.82rem; color: #9ca3af;">Пока нет комментариев.</div>
+                                    <div style="font-size: 0.82rem; color: #52525b;">Пока нет комментариев.</div>
                                 {% endfor %}
                             </div>
                             {% if user.is_authenticated %}
                                 <form class="comment-form" onsubmit="sendComment(event, {{ video.id }})">
                                     {% csrf_token %}
                                     <input type="text" name="text" maxlength="500" placeholder="Написать комментарий..." required>
-                                    <button type="submit">жмяк</button>
+                                    <button type="submit">Жмяк</button>
                                 </form>
                             {% else %}
-                                <div style="font-size: 0.8rem; color: #9ca3af;">
-                                    <a href="{% url 'login' %}" style="color: var(--accent);">Войдите</a>, чтобы комментировать
+                                <div style="font-size: 0.8rem; color: #52525b;">
+                                    <a href="{% url 'login' %}" style="color: #f472b6;">Войдите</a>, чтобы комментировать
                                 </div>
                             {% endif %}
                         </div>
                     </div>
                 </div>
             {% empty %}
-                <div class="empty-state" style="grid-column: 1 / -1;">
+                <div class="empty-state">
                     <p>Пока нет видео.</p>
                     <a href="{% url 'upload' %}">Загрузить первое</a>
                 </div>
@@ -411,6 +540,38 @@
     </div>
 
     <script>
+        // Частицы
+        const particlesContainer = document.getElementById('particles');
+        for (let i = 0; i < 30; i++) {
+            const particle = document.createElement('div');
+            particle.classList.add('particle');
+            const size = Math.random() * 4 + 1;
+            particle.style.width = size + 'px';
+            particle.style.height = size + 'px';
+            particle.style.left = Math.random() * 100 + '%';
+            particle.style.animationDuration = Math.random() * 8 + 6 + 's';
+            particle.style.animationDelay = Math.random() * 8 + 's';
+            particlesContainer.appendChild(particle);
+        }
+
+        // 3D эффект карточек
+        document.querySelectorAll('.video-card').forEach(card => {
+            card.addEventListener('mousemove', (e) => {
+                const rect = card.getBoundingClientRect();
+                const x = e.clientX - rect.left;
+                const y = e.clientY - rect.top;
+                const centerX = rect.width / 2;
+                const centerY = rect.height / 2;
+                const rotateX = (y - centerY) / centerY * -6;
+                const rotateY = (x - centerX) / centerX * 6;
+                card.style.transform = `translateY(-6px) rotateX(${rotateX}deg) rotateY(${rotateY}deg)`;
+            });
+
+            card.addEventListener('mouseleave', () => {
+                card.style.transform = 'translateY(0) rotateX(0) rotateY(0)';
+            });
+        });
+
         function getCookie(name) {
             let cookieValue = null;
             if (document.cookie && document.cookie !== '') {
@@ -442,10 +603,10 @@
                 if (data.success) {
                     document.getElementById(`likes-count-${videoId}`).innerText = data.likes;
                     document.getElementById(`dislikes-count-${videoId}`).innerText = data.dislikes;
-                    messageSpan.innerText = 'Принято';
+                    messageSpan.innerText = '';
                     setTimeout(() => messageSpan.innerText = '', 1500);
                 } else {
-                    messageSpan.innerText = 'Вы уже оценили это видео';
+                    messageSpan.innerText = 'Вы уже оценили';
                     setTimeout(() => messageSpan.innerText = '', 2000);
                 }
             } catch (error) {
