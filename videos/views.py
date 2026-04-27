@@ -40,7 +40,7 @@ def like_video(request, video_id):
         try:
             video = Video.objects.get(id=video_id)
             data = json.loads(request.body)
-            is_like = data.get('is_like')  # True или False
+            is_like = data.get('is_like')
 
             # Проверяем, ставил ли уже пользователь оценку
             existing_like = VideoLike.objects.filter(user=request.user, video=video).first()

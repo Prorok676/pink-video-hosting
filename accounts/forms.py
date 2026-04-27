@@ -4,7 +4,6 @@ from django.contrib.auth.models import User
 
 
 class CustomUserCreationForm(UserCreationForm):
-    # Настраиваем поля, чтобы они говорили по-русски
     username = forms.CharField(
         label="Логин",
         help_text="Только буквы, цифры и @ . + - _",
@@ -39,7 +38,6 @@ class CustomUserCreationForm(UserCreationForm):
     class Meta:
         model = User
         fields = ("username", "password1", "password2")
-        # Переводим стандартные сообщения об ошибках
         error_messages = {
             'password_mismatch': "Пароли не совпадают, попробуйте снова.",
         }

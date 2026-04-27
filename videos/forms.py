@@ -1,4 +1,5 @@
 from django import forms
+from django.core.exceptions import ValidationError
 from .models import Video
 
 class VideoForm(forms.ModelForm):
@@ -13,8 +14,15 @@ class VideoForm(forms.ModelForm):
         }
         help_texts = {
             'video_file': 'Поддерживаются форматы MP4, AVI, MOV',
-            'thumbnail': 'Необязательно. Картинка для обложки видео',
+            'thumbnail': 'Необязательно. JPG, PNG, GIF. Максимум 2 МБ.',
         }
+
+    def clean_thumbnail(self):
+        thumbnail = self.cleaned_data.get('thumbnail')
+        if thumbnail:
+            if thumbnail.size > 2 * 1024 * 1024:  # 2 МБ
+                raise ValidationError("Размер превью не должен превышать 2 МБ.")
+        return thumbnail
 
 
 class CommentForm(forms.Form):

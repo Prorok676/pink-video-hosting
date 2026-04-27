@@ -11,12 +11,12 @@ class Video(models.Model):
     description = models.TextField(blank=True, verbose_name="Описание")
     # Сам файл видео
     video_file = models.FileField(upload_to='videos/', verbose_name="Файл видео")
-    # Превью (картинка)
+    # Превью
     thumbnail = models.ImageField(upload_to='thumbnails/', blank=True, null=True, verbose_name="Превью")
     # Дата загрузки
     created_at = models.DateTimeField(auto_now_add=True, verbose_name="Дата загрузки")
 
-    # Количество лайков и дизлайков (пока просто числа)
+    # Количество лайков и дизлайков
     likes = models.IntegerField(default=0, verbose_name="Лайки")
     dislikes = models.IntegerField(default=0, verbose_name="Дизлайки")
     is_blocked = models.BooleanField(default=False, verbose_name="Заблокировано")

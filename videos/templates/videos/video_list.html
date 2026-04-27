@@ -219,14 +219,15 @@
         }
 
         .video-card .video-thumb {
-            aspect-ratio: 16 / 9;
-            background: #060608;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            overflow: hidden;
-            position: relative;
-        }
+    aspect-ratio: auto;
+    background: #060608;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    position: relative;
+    max-height: 300px;
+}
 
         .video-thumb::after {
             content: '';
@@ -484,11 +485,18 @@
         <div class="video-grid">
             {% for video in videos %}
                 <div class="video-card" id="video-{{ video.id }}" data-tilt>
-                    <div class="video-thumb">
-                        <video controls>
-                            <source src="{{ video.video_file.url }}" type="video/mp4">
-                        </video>
-                    </div>
+                    <div class="video-thumb" style="position: relative; cursor: pointer;" onclick="this.querySelector('video').style.display='block'; this.querySelector('img').style.display='none'; this.querySelector('video').play();">
+    {% if video.thumbnail %}
+       <img src="{{ video.thumbnail.url }}" alt="{{ video.title }}" style="width: 100%; height: 100%; object-fit: cover; display: block;">
+        <video controls data-video style="width: 100%; height: 100%; object-fit: contain; display: none;" onpause="this.style.display='none'; this.parentElement.querySelector('img').style.display='block';">
+            <source src="{{ video.video_file.url }}" type="video/mp4">
+        </video>
+    {% else %}
+        <video controls data-video style="width: 100%; height: 100%; object-fit: contain;">
+            <source src="{{ video.video_file.url }}" type="video/mp4">
+        </video>
+    {% endif %}
+</div>
                     <div class="video-body">
                         <div class="video-title">{{ video.title }}</div>
                         <div class="video-desc">{{ video.description|truncatechars:120 }}</div>
@@ -649,5 +657,15 @@
             }
         }
     </script>
+<script>
+    document.addEventListener('play', function(e) {
+        const allVideos = document.querySelectorAll('video[data-video]');
+        allVideos.forEach(function(v) {
+            if (v !== e.target) {
+                v.pause();
+            }
+        });
+    }, true);
+</script>
 </body>
 </html>
